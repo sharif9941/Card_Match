@@ -16,15 +16,47 @@ public class CardController : MonoBehaviour
     [Header("Game Play")]
     [Tooltip("How long to show cards at start of the game")]
     [SerializeField] float startRevealTime;
-    public float cardFlipAnimTime = 0.5f;
-    [SerializeField] float waitTimeForMatchCheck = 1f;
+    public float cardFlipAnimTime;
+    [SerializeField] float KeepCardsFlippedTime;
 
     Card firstSelectedCard;
     Card secondSelectedCard;
 
     public bool CanSelectCard { get; private set; }
-
     List<Card> gameCardsList;
+
+
+    UIManager UIManager;
+
+    int turnsTaken;
+    int matchesMade;
+
+    public int TurnsTaken
+    {
+        get { return turnsTaken; }
+        set
+        {
+            turnsTaken = value;
+            if(UIManager != null)
+            {
+                UIManager.SetTurnValueText(value.ToString());
+            }
+        }
+    }
+
+    public int MatchesMade
+    {
+        get { return matchesMade; }
+        set
+        {
+            matchesMade = value;
+            if (UIManager != null)
+            {
+                UIManager.SetMatchValueText(value.ToString());
+            }
+        }
+    }
+
 
     void Awake()
     {
@@ -34,8 +66,10 @@ public class CardController : MonoBehaviour
 
     void Start()
     {
+        UIManager = UIManager.Instance;
+
         CanSelectCard = false;
-        StartGame(4, 5);
+        StartGame(4, 6);
     }
 
     void StartGame(int row, int column)
@@ -94,24 +128,18 @@ public class CardController : MonoBehaviour
 
     void CheckForMatch()
     {
-        if(firstSelectedCard.GetFruitType() == secondSelectedCard.GetFruitType())
+        TurnsTaken++;
+
+        if (firstSelectedCard.GetFruitType() == secondSelectedCard.GetFruitType())
         {
             //Match
-            StartCoroutine(CardsMatched());
+            StartCoroutine(CardsMatched(firstSelectedCard, secondSelectedCard));
         }
         else
         {
             //Not a Match
-            StartCoroutine(FlipUnmatchedCardsBack());
+            StartCoroutine(FlipUnmatchedCardsBack(firstSelectedCard, secondSelectedCard));
         }
-    }
-
-    IEnumerator CardsMatched()
-    {
-        yield return new WaitForSeconds(waitTimeForMatchCheck);
-
-        firstSelectedCard.Disable();
-        secondSelectedCard.Disable();
 
         firstSelectedCard = null;
         secondSelectedCard = null;
@@ -119,19 +147,22 @@ public class CardController : MonoBehaviour
         CanSelectCard = true;
     }
 
-    IEnumerator FlipUnmatchedCardsBack()
+    IEnumerator CardsMatched(Card _card1, Card _card2)
     {
-        yield return new WaitForSeconds(waitTimeForMatchCheck);
+        MatchesMade++;
 
-        firstSelectedCard.HideCard();
-        secondSelectedCard.HideCard();
+        yield return new WaitForSeconds(cardFlipAnimTime + (KeepCardsFlippedTime/2));
 
-        firstSelectedCard = null;
-        secondSelectedCard = null;
+        _card1.Disable();
+        _card2.Disable();   
+    }
 
-        yield return new WaitForSeconds(cardFlipAnimTime);
+    IEnumerator FlipUnmatchedCardsBack(Card _card1, Card _card2)
+    {
+        yield return new WaitForSeconds(cardFlipAnimTime + KeepCardsFlippedTime);
 
-        CanSelectCard = true;
+        _card1.HideCard();
+        _card2.HideCard();
     }
     
 }

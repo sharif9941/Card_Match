@@ -64,11 +64,6 @@ public class UIManager : MonoBehaviour
         StartGame(3, 4);
     }
 
-    public void StartGame3x5()
-    {
-        StartGame(3, 5);
-    }
-
     public void StartGame3x6()
     {
         StartGame(3, 6);

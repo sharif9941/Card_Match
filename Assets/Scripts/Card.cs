@@ -4,11 +4,26 @@ using UnityEngine;
 
 public class Card : MonoBehaviour
 {
+    [Header("Face")]
     [SerializeField] Transform cardView;
     [SerializeField] Transform cardBack;
     [SerializeField] Transform cardFront;
 
+    [Header("Fruit")]
+    public FruitSO fruitSO;
+    [SerializeField] SpriteRenderer fruitSR;
+
     bool showHide = false;  //true -> shown && false -> hidden
+
+    void Start()
+    {
+        SetFruitSprite();
+    }
+
+    void SetFruitSprite()
+    {
+        fruitSR.sprite = fruitSO.fruitSprite;
+    }
 
     private void OnMouseDown()
     {

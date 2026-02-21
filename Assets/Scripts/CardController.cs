@@ -67,6 +67,7 @@ public class CardController : MonoBehaviour
     void Start()
     {
         UIManager = UIManager.Instance;
+        gameCardsList = new List<Card>();
     }
 
     public void StartGame(int row, int column)

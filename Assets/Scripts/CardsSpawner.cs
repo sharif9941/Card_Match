@@ -5,7 +5,7 @@ using UnityEngine;
 public class CardsSpawner : MonoBehaviour
 {
     [Header("Grid")]
-    [SerializeField] float padding = 1.5f;
+    [SerializeField] float distancBetweenCards = 1.5f;
 
     public void SpawnCards(int row, int column, List<Card> cards)
     {
@@ -21,20 +21,20 @@ public class CardsSpawner : MonoBehaviour
 
         if (row % 2 != 0)
         {
-            rowStart = ((row - 1) / 2) * padding;
+            rowStart = ((row - 1) / 2) * distancBetweenCards;
         }
         else
         {
-            rowStart = ((row / 2) * padding) - (padding / 2);
+            rowStart = ((row / 2) * distancBetweenCards) - (distancBetweenCards / 2);
         }
 
         if (column % 2 != 0)
         {
-            columnStart = ((column - 1) / 2) * padding * -1f;
+            columnStart = ((column - 1) / 2) * distancBetweenCards * -1f;
         }
         else
         {
-            columnStart = ((column / 2) * padding * -1f) + (padding / 2);
+            columnStart = ((column / 2) * distancBetweenCards * -1f) + (distancBetweenCards / 2);
         }
 
         int index = 0;
@@ -42,10 +42,13 @@ public class CardsSpawner : MonoBehaviour
         {
             for(int j = 0; j < column; j++)
             {
-                pos = new Vector3(columnStart + (j * padding), rowStart - (i * padding)) + transform.position;
+                pos = new Vector3(columnStart + (j * distancBetweenCards), rowStart - (i * distancBetweenCards)) + transform.position;
                 Instantiate(cards[index], pos, Quaternion.identity, transform);
                 index++;
             }
         }
+
+        GetComponent<CardsFitter>().SetScale(row, column, distancBetweenCards);
     }
+
 }

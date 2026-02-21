@@ -31,6 +31,9 @@ public class CardController : MonoBehaviour
     int turnsTaken;
     int matchesMade;
 
+    [SerializeField] int row;
+    [SerializeField] int column;
+
     public int TurnsTaken
     {
         get { return turnsTaken; }
@@ -69,7 +72,7 @@ public class CardController : MonoBehaviour
         UIManager = UIManager.Instance;
 
         CanSelectCard = false;
-        StartGame(4, 6);
+        StartGame(row, column);
     }
 
     void StartGame(int row, int column)

@@ -9,8 +9,11 @@ public class CardsSpawner : MonoBehaviour
 
     public void SpawnCards(int row, int column, List<Card> cards)
     {
+        //Reset Scale
+        transform.localScale = Vector3.one;
+
         //Check
-        if((row * column) != cards.Count)
+        if ((row * column) != cards.Count)
         {
             Debug.LogError("Count mismatch");
         }
@@ -48,6 +51,7 @@ public class CardsSpawner : MonoBehaviour
             }
         }
 
+        //Fit all cards in screenview
         GetComponent<CardsFitter>().SetScale(row, column, distancBetweenCards);
     }
 

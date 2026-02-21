@@ -31,9 +31,6 @@ public class CardController : MonoBehaviour
     int turnsTaken;
     int matchesMade;
 
-    [SerializeField] int row;
-    [SerializeField] int column;
-
     public int TurnsTaken
     {
         get { return turnsTaken; }
@@ -70,15 +67,16 @@ public class CardController : MonoBehaviour
     void Start()
     {
         UIManager = UIManager.Instance;
-
-        CanSelectCard = false;
-        StartGame(row, column);
     }
 
-    void StartGame(int row, int column)
+    public void StartGame(int row, int column)
     {
+        ResetGame();
+
+        CanSelectCard = false;
+
         //Cards count should be even i.e all cards hav a match
-        if((row * column) % 2 != 0)
+        if ((row * column) % 2 != 0)
         {
             column++;
         }
@@ -156,8 +154,8 @@ public class CardController : MonoBehaviour
 
         yield return new WaitForSeconds(cardFlipAnimTime + (KeepCardsFlippedTime/2));
 
-        _card1.Disable();
-        _card2.Disable();
+        _card1.DisableCard();
+        _card2.DisableCard();
 
         CheckForGameEnd();
     }
@@ -181,10 +179,38 @@ public class CardController : MonoBehaviour
             UIManager.Won();
         }
 
-        if(turnsTaken > 25)
+        if(turnsTaken > 24)
         {
             //Lost
+            ClearAllCards();
             UIManager.Lost();
         }
+    }
+
+    void ClearAllCards()
+    {
+        StopAllCoroutines();
+
+        foreach (var card in gameCardsList)
+        {
+            Destroy(card.gameObject);
+        }
+        gameCardsList.Clear();
+    }
+
+    void ResetGame()
+    {
+        StopAllCoroutines();
+
+        totalMatchCount = 0;
+        totalCardsCount = 0;
+
+        firstSelectedCard = null;
+        secondSelectedCard = null;
+
+        TurnsTaken = 0;
+        MatchesMade = 0;
+
+        ClearAllCards();
     }
 }

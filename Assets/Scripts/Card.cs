@@ -115,8 +115,22 @@ public class Card : MonoBehaviour
         }
     }
 
-    public void Disable()
+    public void DisableCard()
     {
+        StartCoroutine(Disable());
+    }
+
+    IEnumerator Disable()
+    {
+        float timer = 0f;
+        float inTime = 0.15f;
+        while (timer < inTime)
+        {
+            transform.localScale = Vector3.Lerp(Vector3.one, Vector3.zero, timer / inTime);
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
         gameObject.SetActive(false);
     }
 }

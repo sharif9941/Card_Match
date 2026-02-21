@@ -27,7 +27,7 @@ public class CardsFitter : MonoBehaviour
 
         float scale = Mathf.Min(widthscale, heightscale);
 
-        Debug.Log(widthscale + " " + heightscale + " " + scale);
+        //Debug.Log(widthscale + " " + heightscale + " " + scale);
         
         transform.localScale = new Vector3(scale, scale, 1f);
     }

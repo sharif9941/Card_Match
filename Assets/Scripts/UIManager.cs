@@ -7,8 +7,13 @@ public class UIManager : MonoBehaviour
 {
     public static UIManager Instance;
 
+    [Header("Text Components")]
     [SerializeField] TextMeshProUGUI matchValueText;
     [SerializeField] TextMeshProUGUI turnValueText;
+
+    [Header("Game End")]
+    [SerializeField] GameObject WonPanel;
+    [SerializeField] GameObject LostPanel;
 
     private void Awake()
     {
@@ -23,5 +28,15 @@ public class UIManager : MonoBehaviour
     public void SetTurnValueText(string value)
     {
         turnValueText.text = value;
+    }
+
+    public void Won()
+    {
+        WonPanel.SetActive(true);
+    }
+
+    public void Lost()
+    {
+        LostPanel.SetActive(true);
     }
 }

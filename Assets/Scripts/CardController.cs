@@ -157,15 +157,34 @@ public class CardController : MonoBehaviour
         yield return new WaitForSeconds(cardFlipAnimTime + (KeepCardsFlippedTime/2));
 
         _card1.Disable();
-        _card2.Disable();   
+        _card2.Disable();
+
+        CheckForGameEnd();
     }
 
     IEnumerator FlipUnmatchedCardsBack(Card _card1, Card _card2)
     {
+        CheckForGameEnd();
+
         yield return new WaitForSeconds(cardFlipAnimTime + KeepCardsFlippedTime);
 
         _card1.HideCard();
         _card2.HideCard();
     }
     
+
+    void CheckForGameEnd()
+    {
+        if(totalMatchCount == matchesMade)
+        {
+            //Won
+            UIManager.Won();
+        }
+
+        if(turnsTaken > 25)
+        {
+            //Lost
+            UIManager.Lost();
+        }
+    }
 }

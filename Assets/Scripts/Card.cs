@@ -10,51 +10,86 @@ public class Card : MonoBehaviour
     [SerializeField] Transform cardFront;
 
     [Header("Fruit")]
-    public FruitSO fruitSO;
+    [SerializeField] FruitSO fruitSO;
     [SerializeField] SpriteRenderer fruitSR;
 
+    CardController CardController;
+
     bool showHide = false;  //true -> shown && false -> hidden
-    float cardRevealTime = 0.5f;
+    float cardFlipAnimTime;
+
+    public FruitEnum.Fruit GetFruitType()
+    {
+        return fruitSO.FruitEnum;
+    }
 
     void Start()
     {
+        CardController = CardController.Instance;
+        cardFlipAnimTime = CardController.cardFlipAnimTime;
         SetFruitSprite();
     }
 
     void SetFruitSprite()
     {
-        fruitSR.sprite = fruitSO.fruitSprite;
+        fruitSR.sprite = fruitSO.FruitSprite;
     }
 
     private void OnMouseDown()
     {
-        if(!showHide)
+        if(!showHide && CardController.CanSelectCard)
         {
-            Debug.Log("Show");
-            showHide = true;
-            StartCoroutine(Show());
+            ShowCard();
+            CardController.CardSelected(this);
         }
     }
 
-    public IEnumerator Show()
+    public void ShowCard()
     {
-        yield return StartCoroutine(RotateObject(cardView, new Vector3(0, 90, 0), cardRevealTime / 2));
+        showHide = true;
+        StartCoroutine(Show());
+    }
+
+    public void ShowCardImmediate()
+    {
+        showHide = true;
+
+        cardBack.gameObject.SetActive(false);
+        cardFront.gameObject.SetActive(true);
+    }
+
+    public void HideCard()
+    {
+        StartCoroutine(Hide());
+    }
+
+    public void HideCardImmediate()
+    {
+        cardBack.gameObject.SetActive(true);
+        cardFront.gameObject.SetActive(false);
+
+        showHide = false;
+    }
+
+    IEnumerator Show()
+    {
+        yield return StartCoroutine(RotateObject(cardView, new Vector3(0, 90, 0), cardFlipAnimTime / 2));
 
         cardBack.gameObject.SetActive(false);
         cardFront.gameObject.SetActive(true);
 
-        yield return StartCoroutine(RotateObject(cardView, new Vector3(0, 180, 0), cardRevealTime / 2));
+        yield return StartCoroutine(RotateObject(cardView, new Vector3(0, 180, 0), cardFlipAnimTime / 2));
     }
 
 
-    public IEnumerator Hide()
+    IEnumerator Hide()
     {
-        yield return StartCoroutine(RotateObject(cardView, new Vector3(0, 270, 0), cardRevealTime / 2));
+        yield return StartCoroutine(RotateObject(cardView, new Vector3(0, 270, 0), cardFlipAnimTime / 2));
 
         cardBack.gameObject.SetActive(true);
         cardFront.gameObject.SetActive(false);
 
-        yield return StartCoroutine(RotateObject(cardView, new Vector3(0, 360, 0), cardRevealTime / 2, true));
+        yield return StartCoroutine(RotateObject(cardView, new Vector3(0, 360, 0), cardFlipAnimTime / 2, true));
 
         showHide = false;
     }
@@ -78,5 +113,10 @@ public class Card : MonoBehaviour
         {
             obj.rotation = Quaternion.Euler(0, 0, 0);
         }
+    }
+
+    public void Disable()
+    {
+        gameObject.SetActive(false);
     }
 }

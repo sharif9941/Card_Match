@@ -5,6 +5,16 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/FruitSO", order = 1)]
 public class FruitSO : ScriptableObject
 {
-    public FruitEnum.Fruit fruitEnum;
-    public Sprite fruitSprite;
+    [SerializeField] FruitEnum.Fruit fruitEnum;
+    [SerializeField] Sprite fruitSprite;
+
+    public FruitEnum.Fruit FruitEnum
+    {
+        get { return fruitEnum; }
+    }
+
+    public Sprite FruitSprite
+    {
+        get { return fruitSprite; }
+    }
 }

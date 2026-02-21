@@ -14,6 +14,7 @@ public class Card : MonoBehaviour
     [SerializeField] SpriteRenderer fruitSR;
 
     bool showHide = false;  //true -> shown && false -> hidden
+    float cardRevealTime = 0.5f;
 
     void Start()
     {
@@ -37,23 +38,23 @@ public class Card : MonoBehaviour
 
     public IEnumerator Show()
     {
-        yield return StartCoroutine(RotateObject(cardView, new Vector3(0, 90, 0), 1f));
+        yield return StartCoroutine(RotateObject(cardView, new Vector3(0, 90, 0), cardRevealTime / 2));
 
         cardBack.gameObject.SetActive(false);
         cardFront.gameObject.SetActive(true);
 
-        yield return StartCoroutine(RotateObject(cardView, new Vector3(0, 180, 0), 1f));
+        yield return StartCoroutine(RotateObject(cardView, new Vector3(0, 180, 0), cardRevealTime / 2));
     }
 
 
     public IEnumerator Hide()
     {
-        yield return StartCoroutine(RotateObject(cardView, new Vector3(0, 270, 0), 1f));
+        yield return StartCoroutine(RotateObject(cardView, new Vector3(0, 270, 0), cardRevealTime / 2));
 
         cardBack.gameObject.SetActive(true);
         cardFront.gameObject.SetActive(false);
 
-        yield return StartCoroutine(RotateObject(cardView, new Vector3(0, 360, 0), 1f, true));
+        yield return StartCoroutine(RotateObject(cardView, new Vector3(0, 360, 0), cardRevealTime / 2, true));
 
         showHide = false;
     }
@@ -67,8 +68,8 @@ public class Card : MonoBehaviour
         float timer = 0f;
         while (timer < inTime)
         {
-            obj.rotation = Quaternion.Lerp(fromAngle, toAngle, timer);
-            timer += Time.deltaTime / inTime;
+            obj.rotation = Quaternion.Lerp(fromAngle, toAngle, timer / inTime);
+            timer += Time.deltaTime;
             yield return null;
         }
 

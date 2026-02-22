@@ -27,6 +27,7 @@ public class CardController : MonoBehaviour
 
 
     UIManager UIManager;
+    AudioManager AudioManager;
 
     int turnsTaken;
     int matchesMade;
@@ -67,6 +68,7 @@ public class CardController : MonoBehaviour
     void Start()
     {
         UIManager = UIManager.Instance;
+        AudioManager = AudioManager.Instance;
         gameCardsList = new List<Card>();
     }
 
@@ -152,6 +154,7 @@ public class CardController : MonoBehaviour
     IEnumerator CardsMatched(Card _card1, Card _card2)
     {
         MatchesMade++;
+        AudioManager.PlayMatch();
 
         yield return new WaitForSeconds(cardFlipAnimTime + (KeepCardsFlippedTime/2));
 
@@ -163,6 +166,7 @@ public class CardController : MonoBehaviour
 
     IEnumerator FlipUnmatchedCardsBack(Card _card1, Card _card2)
     {
+        AudioManager.PlayMismatch();
         CheckForGameEnd();
 
         yield return new WaitForSeconds(cardFlipAnimTime + KeepCardsFlippedTime);
@@ -178,6 +182,7 @@ public class CardController : MonoBehaviour
         {
             //Won
             UIManager.Won();
+            AudioManager.PlayGameOver();
         }
 
         if(turnsTaken > 24)
@@ -185,6 +190,7 @@ public class CardController : MonoBehaviour
             //Lost
             ClearAllCards();
             UIManager.Lost();
+            AudioManager.PlayGameOver();
         }
     }
 

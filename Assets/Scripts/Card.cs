@@ -14,6 +14,7 @@ public class Card : MonoBehaviour
     [SerializeField] SpriteRenderer fruitSR;
 
     CardController CardController;
+    AudioManager AudioManager;
 
     bool showHide = false;  //true -> shown && false -> hidden
     float cardFlipAnimTime;
@@ -26,6 +27,7 @@ public class Card : MonoBehaviour
     void Start()
     {
         CardController = CardController.Instance;
+        AudioManager = AudioManager.Instance;
         cardFlipAnimTime = CardController.cardFlipAnimTime;
         SetFruitSprite();
     }
@@ -47,6 +49,7 @@ public class Card : MonoBehaviour
     public void ShowCard()
     {
         showHide = true;
+        AudioManager.PlayCardFlip();
         StartCoroutine(Show());
     }
 

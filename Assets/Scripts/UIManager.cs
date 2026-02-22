@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class UIManager : MonoBehaviour
 {
     public static UIManager Instance;
+    SaveSystem SaveSystem;
 
     [Header("Text Components")]
     [SerializeField] TextMeshProUGUI matchValueText;
@@ -18,9 +20,19 @@ public class UIManager : MonoBehaviour
     [Space]
     [SerializeField] GameObject StartPanel;
 
+    [Space]
+    [SerializeField] Button loadButton;
+
     private void Awake()
     {
         Instance = this;
+    }
+
+    void Start()
+    {
+        SaveSystem = SaveSystem.Instance;
+
+        loadButton.interactable = SaveSystem.CheckGameSave();
     }
 
     public void SetMatchValueText(string value)
@@ -46,6 +58,8 @@ public class UIManager : MonoBehaviour
     public void ShowStartPanel()
     {
         StartPanel.SetActive(true);
+
+        loadButton.interactable = SaveSystem.CheckGameSave();
     }
 
     #region StartGame
@@ -113,4 +127,18 @@ public class UIManager : MonoBehaviour
         CardController.Instance.StartGame(row, column);
     }
     #endregion
+
+    public void LoadGame()
+    {
+        if (!SaveSystem.CheckGameSave())
+            return;
+
+        var saveData = SaveSystem.LoadSavedData();
+
+        StartPanel.SetActive(false);
+        WonPanel.SetActive(false);
+        LostPanel.SetActive(false);
+
+        CardController.Instance.LoadGame(saveData);
+    }
 }

@@ -194,7 +194,10 @@ public class CardController : MonoBehaviour
 
         foreach (var card in gameCardsList)
         {
-            Destroy(card.gameObject);
+            if(card != null)
+            {
+                Destroy(card.gameObject);
+            }         
         }
         gameCardsList.Clear();
     }

@@ -238,6 +238,7 @@ public class CardController : MonoBehaviour
             UIManager.Won();
             AudioManager.PlayGameOver();
             SaveSystem.ClearSave();
+            return;
         }
 
         if(turnsTaken > 24)
